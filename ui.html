@@ -1,0 +1,95 @@
+<form id="setApiKey">
+  <p>You can find your API key on <a href="https://www.remove.bg/profile#api-key">https://www.remove.bg/profile#api-key</a>.</p>
+  <input type="text" placeholder="Api Key" id="apiKey">
+  <button type="submit">
+    Save
+  </button>
+</form>
+<style>
+#setApiKey p {
+  font-family: Inter,sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  margin: 0 0 8px 0;
+}
+#setApiKey input,
+#setApiKey button {
+  -webkit-appearance: none;
+  font-family: Inter,sans-serif;
+  font-size: 11px;
+  line-height: 16px;
+  outline: none;
+  letter-spacing: .005em;
+}
+#setApiKey input {
+  font-weight: 400;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  margin: 1px 0 1px 0;
+  padding: 8px 4px 8px 7px;
+  color: rgba(0,0,0,.8);
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 2px;
+}
+#setApiKey button {
+  color: #fff;
+  cursor: pointer;
+  background-color: #18a0fb;
+  font-weight: 500;
+  padding: 5px 16px 5px 16px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  display: table;
+  margin-top: 8px;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+
+document.querySelector('#setApiKey').onsubmit = e => {
+  e.preventDefault()
+  window.parent.postMessage({
+    pluginMessage: document.getElementById('apiKey').value
+  }, '*')
+}
+
+window.onmessage = async (event) => {
+  if(event.data.pluginMessage.type == 'key') {
+    document.getElementById('apiKey').value = event.data.pluginMessage.apikey || ''
+  }
+  if(event.data.pluginMessage.type == 'run') {
+
+    let data = new FormData();
+    data.append('image_file_b64', btoa(String.fromCharCode(...new Uint8Array(event.data.pluginMessage.bytes))));
+
+    fetch('https://api.remove.bg/v1.0/removebg', {
+      method: 'POST',
+      headers: {
+        'X-Api-Key': event.data.pluginMessage.apikey,
+        'Accept': 'application/json'
+      },
+      body: data
+    }).then(response => {
+      if(!response.ok) {
+        throw response
+      }
+      return response
+    }).then(response => {
+      response.json().then(res => {
+        window.parent.postMessage({
+          pluginMessage: Uint8Array.from(atob(res.data.result_b64), c => c.charCodeAt(0))
+        }, '*')
+      })
+    }).catch(response => {
+      response.json().then(res => {
+        window.parent.postMessage({
+          pluginMessage: res
+        }, '*')
+      })
+    })
+  }
+}
+</script>

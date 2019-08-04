@@ -1,0 +1,20 @@
+{
+  "name": "Remove BG",
+  "id": "738992712906748191",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "menu": [
+    {
+      "name": "Run",
+      "command": "removebgfunc"
+    },
+    {
+      "separator": true
+    },
+    {
+      "name": "Set API Key",
+      "command": "removebgkey"
+    }
+  ]
+}
