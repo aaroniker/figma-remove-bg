@@ -1,22 +1,28 @@
-This plugin template uses Typescript. If you are familiar with Javascript, Typescript will
-look very familiar. In fact, valid Javascript code is already valid Typescript code.
+# Figma Remove.bg Plugin
 
-Typescript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+Remove background of images with just 1-click (Using https://www.remove.bg/).
 
-For more information, visit https://www.typescriptlang.org/
+![Preview](https://aaroniker.me/removebg.gif)
 
-Using Typescript requires a compiler to convert Typescript (code.ts) into Javascript (code.js)
-for the browser to run.
+## Usage
 
-To get the TypeScript compiler working:
+First clone this repository
+```shell
+git clone https://github.com/aaroniker/figma-remove-bg.git
+cd figma-remove-bg
+```
 
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Install the TypeScript compiler globally: `sudo npm install -g typescript`.
-3. Open this directory in Visual Studio Code.
-4. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "tsc: watch - tsconfig.json". You will have to do this again every time
-    you reopen Visual Studio Code.
+Then compile .ts files (you need [TypeScript](https://www.typescriptlang.org/) installed)
+```shell
+tsc --build
+# Or watch: tsc --watch
+```
 
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+After that open a project in Figma Desktop, select _Plugins -> Development -> New Plugin_. Click `Choose a manifest.json` and find the `manifest.json` file in this plugin directory.
+
+Done! Now _Plugins -> Development -> Remove BG -> Run/Set API Key_
+
+## ToDo
+
+- [ ] Show statistics about available/used credits
+- [ ] More options, e.x. size
