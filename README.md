@@ -26,3 +26,4 @@ Done! Now _Plugins -> Development -> Remove BG -> Run/Set API Key_
 
 - [ ] Show statistics about available/used credits
 - [ ] More options, e.x. size
+- [ ] Support selecting multiple nodes
