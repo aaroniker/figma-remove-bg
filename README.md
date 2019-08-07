@@ -6,6 +6,10 @@ Remove background of images with just 1-click (Using https://www.remove.bg/).
 
 ## Usage
 
+Download it on the Figma plugin library [figma.com/c/plugin/738992712906748191/Remove-BG](https://www.figma.com/c/plugin/738992712906748191/Remove-BG)
+
+## Development
+
 First clone this repository
 ```shell
 git clone https://github.com/aaroniker/figma-remove-bg.git
