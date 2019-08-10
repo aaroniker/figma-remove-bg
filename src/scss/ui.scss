@@ -1,0 +1,64 @@
+$primary: #18a0fb;
+
+#setApiKey {
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 16px;
+    a {
+        color: $primary;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    p {
+        color: rgba(0, 0, 0, .5);
+        margin: 12px 0 0 0;
+    }
+    ol {
+        margin: 0 0 8px 0;
+        padding: 0 0 0 16px;
+        li:not(:last-child) {
+            margin-bottom: 6px;
+        }
+    }
+    input,
+    button {
+        -webkit-appearance: none;
+        font-family: Inter,sans-serif;
+        outline: none;
+        letter-spacing: .005em;
+        font-size: 11px;
+        line-height: 16px;
+    }
+    input {
+        position: relative;
+        align-items: center;
+        width: 100%;
+        height: 30px;
+        margin: 1px 0 1px 0;
+        padding: 8px 4px 8px 7px;
+        color: rgba(0,0,0,.8);
+        border: 1px solid rgba(0,0,0,.12);
+        border-radius: 2px;
+        transition: border-color .3s ease;
+        &:hover {
+            border-color: rgba(0,0,0,.24);
+        }
+        &:focus {
+            border-color: $primary;
+        }
+    }
+    button {
+        color: #fff;
+        cursor: pointer;
+        background-color: $primary;
+        font-weight: 500;
+        padding: 5px 16px 5px 16px;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        display: table;
+        margin-top: 8px;
+    }
+}

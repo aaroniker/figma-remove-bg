@@ -16,10 +16,11 @@ git clone https://github.com/aaroniker/figma-remove-bg.git
 cd figma-remove-bg
 ```
 
-Then compile .ts files (you need [TypeScript](https://www.typescriptlang.org/) installed)
+Install dependencies & build files
 ```shell
-tsc --build
-# Or watch: tsc --watch
+npm install
+npm run build
+# Or watch: npm run dev
 ```
 
 After that open a project in Figma Desktop, select _Plugins -> Development -> New Plugin_. Click `Choose a manifest.json` and find the `manifest.json` file in this plugin directory.

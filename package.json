@@ -1,0 +1,34 @@
+{
+  "name": "figma-remove-bg",
+  "version": "1.0.0",
+  "description": "Remove the background of images automatically",
+  "main": "code.js",
+  "scripts": {
+    "dev": "npx webpack --mode=development --watch",
+    "build": "npx webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aaroniker/figma-remove-bg.git"
+  },
+  "author": "Aaron Iker",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^3.2.0",
+    "html-webpack-inline-source-plugin": "0.0.10",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.2.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "url-loader": "^2.1.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.1",
+    "jquery": "^3.4.1"
+  }
+}
