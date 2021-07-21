@@ -32,6 +32,7 @@ window.onmessage = async (event) => {
       },
       body: JSON.stringify({
         image_file_b64: base64,
+        size: "auto",
       }),
     })
       .then((response) => {
