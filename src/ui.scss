@@ -1,0 +1,77 @@
+$primary: #18a0fb;
+
+#setApiKey {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 8px;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    color: rgba(0, 0, 0, 0.5);
+    margin: 12px 0 0 0;
+  }
+
+  ol {
+    margin: 0 0 12px 0;
+    padding: 0 0 0 16px;
+
+    li:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+
+  .row {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: auto 76px;
+  }
+
+  input,
+  button {
+    -webkit-appearance: none;
+    font-family: Inter, sans-serif;
+    outline: none;
+    border: none;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 7px 8px;
+    margin: 0;
+    border-radius: 5px;
+    display: block;
+  }
+
+  input {
+    position: relative;
+    align-items: center;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.2s;
+    background: none;
+
+    &:hover {
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.24);
+    }
+
+    &:focus {
+      border-color: $primary;
+    }
+  }
+
+  button {
+    color: #fff;
+    cursor: pointer;
+    background-color: $primary;
+    font-weight: 500;
+    text-align: center;
+  }
+}
