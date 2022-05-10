@@ -68,7 +68,12 @@ if (figma.command == "removebgfunc") {
   });
 } else if (figma.command == "removebgkey") {
   figma.clientStorage.getAsync("removeBgApiKey").then((apiKey) => {
-    figma.showUI(__html__, { height: 188, width: 332, visible: true });
+    figma.showUI(__html__, {
+      height: 188,
+      width: 332,
+      visible: true,
+      themeColors: true,
+    });
     figma.ui.postMessage({
       type: "key",
       apikey: apiKey,
