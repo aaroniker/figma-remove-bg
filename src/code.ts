@@ -1,10 +1,11 @@
 if (figma.command == "removebgfunc") {
   async function checkFill(fill, apiKey) {
     if (fill.type === "IMAGE") {
+      figma.showUI(__html__, { visible: false });
+
       const image = figma.getImageByHash(fill.imageHash);
       const bytes = await image.getBytesAsync();
 
-      figma.showUI(__html__, { visible: false });
       figma.ui.postMessage({
         type: "run",
         bytes: bytes,
@@ -17,6 +18,9 @@ if (figma.command == "removebgfunc") {
             figma.closePlugin(response.errors[0].title);
           } else {
             resolve(response as Uint8Array);
+          }
+          if (response.type === "error") {
+            figma.closePlugin(response.message);
           }
         };
       });
@@ -69,8 +73,8 @@ if (figma.command == "removebgfunc") {
 } else if (figma.command == "removebgkey") {
   figma.clientStorage.getAsync("removeBgApiKey").then((apiKey) => {
     figma.showUI(__html__, {
-      height: 188,
-      width: 332,
+      height: 220,
+      width: 348,
       visible: true,
       themeColors: true,
     });

@@ -63,14 +63,26 @@ export const App: React.FC = () => {
             });
           })
           .catch((response) => {
-            response.json().then((res) => {
+            try {
+              response.json().then((res) => {
+                parent.postMessage(
+                  {
+                    pluginMessage: res,
+                  },
+                  "*"
+                );
+              });
+            } catch (e) {
               parent.postMessage(
                 {
-                  pluginMessage: res,
+                  pluginMessage: {
+                    type: "error",
+                    message: "Error, please DM me on 𝕏 @aaroniker_me",
+                  },
                 },
                 "*"
               );
-            });
+            }
           });
       }
     };
@@ -114,6 +126,13 @@ export const App: React.FC = () => {
           here
         </a>
         .
+      </p>
+      <p>
+        Follow me on{" "}
+        <a target="_blank" href="https://twitter.com/aaroniker_me">
+          𝕏 (@aaroniker_me)
+        </a>{" "}
+        for updates &amp; more.
       </p>
     </form>
   );
