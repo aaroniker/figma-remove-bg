@@ -17,5 +17,12 @@
       "name": "Set API Key",
       "command": "removebgkey"
     }
-  ]
+  ],
+  "networkAccess": {
+    "allowedDomains": [
+      "https://remove.bg",
+      "https://api.remove.bg",
+      "https://api.remove.bg/v1.0/removebg"
+    ]
+  }
 }
