@@ -12,24 +12,27 @@ if (figma.command == "removebgfunc") {
         apikey: apiKey,
       });
 
-      const array: Uint8Array = await new Promise((resolve, reject) => {
-        figma.ui.onmessage = (response) => {
-          if (typeof response.errors !== "undefined") {
-            figma.closePlugin(response.errors[0].title);
-          } else {
-            resolve(response as Uint8Array);
-          }
-          if (response.type === "error") {
-            figma.closePlugin(response.message);
-          }
-        };
-      });
+      const response: { uint8Array: Uint8Array; credits: string } =
+        await new Promise((resolve, reject) => {
+          figma.ui.onmessage = (res) => {
+            if (
+              typeof res["errors"] !== "undefined" &&
+              Array.isArray(res["errors"]) &&
+              res["errors"].length > 0
+            ) {
+              figma.closePlugin(res["errors"][0].title);
+            } else {
+              resolve(res);
+            }
+          };
+        });
 
       const newImageFill = JSON.parse(JSON.stringify(fill));
-      newImageFill.imageHash = figma.createImage(array).hash;
+      newImageFill.imageHash = figma.createImage(response.uint8Array).hash;
 
       return {
         fill: newImageFill,
+        credits: response.credits,
         updated: true,
       };
     }
@@ -52,7 +55,16 @@ if (figma.command == "removebgfunc") {
       }
       node.fills = newFills;
       figma.closePlugin(
-        updated ? "Image background removed." : "Nothing changed."
+        updated
+          ? `Image background removed${
+              typeof check.credits !== "undefined" &&
+              check.credits.toString().length > 0
+                ? ` (${check.credits} ${
+                    Number(check.credits) === 1 ? "credit" : "credits"
+                  } charged)`
+                : ""
+            }.`
+          : "Nothing changed (No credits charged)."
       );
     } else {
       figma.closePlugin("Select a node with image fill.");

@@ -2,6 +2,18 @@ import React, { FormEvent, useEffect, ChangeEvent, useState } from "react";
 import ReactDOM from "react-dom";
 import "./ui.scss";
 
+const uint8ArrayToBase64 = (bytes: Uint8Array) => {
+  let binary = "";
+  let len = bytes.byteLength;
+
+  for (let i = 0; i < len; i += 1024) {
+    const chunk = bytes.subarray(i, i + 1024);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+
+  return window.btoa(binary);
+};
+
 export const App: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>("");
 
@@ -22,68 +34,80 @@ export const App: React.FC = () => {
         setApiKey(event.data.pluginMessage.apikey || "");
       }
       if (event.data.pluginMessage.type == "run") {
-        const base64 = btoa(
-          new Uint8Array(event.data.pluginMessage.bytes).reduce(
-            (data, byte) => {
-              return data + String.fromCharCode(byte);
-            },
-            ""
-          )
-        );
+        try {
+          const base64 = uint8ArrayToBase64(
+            new Uint8Array(event.data.pluginMessage.bytes)
+          );
 
-        fetch("https://api.remove.bg/v1.0/removebg", {
-          method: "POST",
-          headers: {
-            "X-Api-Key": event.data.pluginMessage.apikey,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            image_file_b64: base64,
-            size: "auto",
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw response;
-            }
-            return response;
+          const formData = new FormData();
+          formData.append("size", "auto");
+          formData.append("image_file_b64", base64);
+
+          let credits: string = "";
+
+          fetch("https://api.remove.bg/v1.0/removebg", {
+            method: "POST",
+            headers: {
+              "X-Api-Key": event.data.pluginMessage.apikey,
+            },
+            body: formData,
           })
-          .then((response) => {
-            response.json().then((res) => {
-              parent.postMessage(
-                {
-                  pluginMessage: Uint8Array.from(
-                    atob(res.data.result_b64),
-                    (c) => c.charCodeAt(0)
-                  ),
-                },
-                "*"
-              );
-            });
-          })
-          .catch((response) => {
-            try {
-              response.json().then((res) => {
-                parent.postMessage(
-                  {
-                    pluginMessage: res,
-                  },
-                  "*"
-                );
-              });
-            } catch (e) {
+            .then((response) => {
+              if (!response.ok) {
+                throw response;
+              }
+              credits = response.headers.get("X-Credits-Charged");
+              return response.blob();
+            })
+            .then((blob) => {
+              return blob.arrayBuffer();
+            })
+            .then((arrayBuffer) => {
+              const uint8Array = new Uint8Array(arrayBuffer);
+              console.log(uint8Array, credits);
               parent.postMessage(
                 {
                   pluginMessage: {
-                    type: "error",
-                    message: "Error, please DM me on 𝕏 @aaroniker_me",
+                    uint8Array,
+                    credits,
                   },
                 },
                 "*"
               );
-            }
-          });
+            })
+            .catch((response) => {
+              try {
+                response.json().then((res) => {
+                  parent.postMessage(
+                    {
+                      pluginMessage: res,
+                    },
+                    "*"
+                  );
+                });
+              } catch (e) {
+                parent.postMessage(
+                  {
+                    pluginMessage: {
+                      type: "error",
+                      message: "Error, please DM me on 𝕏 @aaroniker_me",
+                    },
+                  },
+                  "*"
+                );
+              }
+            });
+        } catch (e) {
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "error",
+                message: " DM me on 𝕏 @aaroniker_me",
+              },
+            },
+            "*"
+          );
+        }
       }
     };
   }, []);
