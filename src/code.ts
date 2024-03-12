@@ -8,7 +8,7 @@ if (figma.command == "removebgfunc") {
 
       figma.ui.postMessage({
         type: "run",
-        bytes: bytes,
+        buffer: bytes.buffer,
         apikey: apiKey,
       });
 

@@ -2,16 +2,27 @@ import React, { FormEvent, useEffect, ChangeEvent, useState } from "react";
 import ReactDOM from "react-dom";
 import "./ui.scss";
 
-const uint8ArrayToBase64 = (bytes: Uint8Array) => {
-  let binary = "";
-  let len = bytes.byteLength;
+const getImageBinary = (bytes: ArrayBuffer): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const blob = new Blob([new Uint8Array(bytes)], { type: "image/jpeg" });
+      const url = URL.createObjectURL(blob);
 
-  for (let i = 0; i < len; i += 1024) {
-    const chunk = bytes.subarray(i, i + 1024);
-    binary += String.fromCharCode.apply(null, chunk);
-  }
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(blob);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Invalid image"));
+      };
 
-  return window.btoa(binary);
+      img.src = url;
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
 export const App: React.FC = () => {
@@ -35,13 +46,13 @@ export const App: React.FC = () => {
       }
       if (event.data.pluginMessage.type == "run") {
         try {
-          const base64 = uint8ArrayToBase64(
-            new Uint8Array(event.data.pluginMessage.bytes)
+          const imageBinary = await getImageBinary(
+            event.data.pluginMessage.buffer
           );
 
           const formData = new FormData();
           formData.append("size", "auto");
-          formData.append("image_file_b64", base64);
+          formData.append("image_file", imageBinary);
 
           let credits: string = "";
 
@@ -64,7 +75,6 @@ export const App: React.FC = () => {
             })
             .then((arrayBuffer) => {
               const uint8Array = new Uint8Array(arrayBuffer);
-              console.log(uint8Array, credits);
               parent.postMessage(
                 {
                   pluginMessage: {
@@ -98,11 +108,14 @@ export const App: React.FC = () => {
               }
             });
         } catch (e) {
+          console.log("Error", e);
+
           parent.postMessage(
             {
               pluginMessage: {
                 type: "error",
-                message: " DM me on 𝕏 @aaroniker_me",
+                message:
+                  "Error in dev console, please DM me on 𝕏 @aaroniker_me",
               },
             },
             "*"
